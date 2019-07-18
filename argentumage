@@ -1,16 +1,15 @@
 #!/usr/bin/perl
 
 ### BEGIN INIT INFO
-# Provides:          argentumage
+# Provides:          lugdunon
 # Required-Start:    $local_fs $remote_fs $network $syslog
 # Required-Stop:     $local_fs $remote_fs $network $syslog
 # Default-Start:     2 3 4 5
 # Default-Stop:      0 1 6
-# Short-Description: Argentum Age Game service 1.0
-# Description:       Argentum Age Game service 1.0
-# Documentation:     https://argentumage.gameplayer.club
+# Short-Description: Lugdunon service 1.0
+# Description:       Lugdunon service 1.0
+# Documentation:     https://synchronetbbs.org/index.php/forum/alternate-startup-scripts
 # Type:              forking
-# PIDFile:           /var/run/argentumage.pid
 # X-Interactive:     false
 ### END INIT INFO
 
@@ -28,89 +27,78 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
-my $SBBSDIR = "/root/sbbs";
-my $PIDFILE = "/var/run/sbbs.pid";
-my $pidnum = "";
+my $LUGDUNONDIR = "/root/lugdunon";
+# Read in host name
+my $HOSTFILE = "/etc/hostname";
+open FILE, $HOSTFILE or die "Couldn't open file: $HOSTFILE";
+my $HOST = <FILE>;
+close FILE;
+chop($HOST);
 
-# Get the SBBS process pid
-if (-f $PIDFILE)
-{
-	open(INPF, "<$PIDFILE") || die "Unable to open $PIDFILE for input";
-	{
-        	local $/;
-        	$pidnum = <INPF>;
-	}
-	close(INPF);
-}
-else
-{
-	$pidnum = "nofile";
-}
+my $KILL_COMMAND = "/usr/bin/wget -O /dev/null http://$HOST:41976/management/CORE.COMMAND.SHUTDOWN?mode=now";
 
 my $Command = $ARGV[0];
-
-my $running="";
-# check if BBS process is running
-my $exists = "";
-if ($pidnum ne "nofile")
+if ($Command eq "")
 {
-	$exists = kill 0, $pidnum;
-	if ($exists)
-	{
-		$running = "running";
-	}
+	$Command = "NONE";
 }
-if (($Command eq "") || ($Command eq "start"))
+
+my $running=`ps ax|grep net.lugdunon.Server|grep -v grep`;
+
+if ($Command eq "start")
 {
-	if ($running ne "running")
+	if ($running eq "")
 	{
-		print "Starting SBBS...\n";
-		if (-f "$SBBSDIR/nostart")
+		print "Starting Lugdunon...\n";
+		if (-f "$LUGDUNONDIR/nostart")
 		{
-			print "Removing $SBBSDIR/nostart\n";
+			print "Removing $LUGDUNONDIR/nostart\n";
 			# Remove the lock file if it exists
-			unlink("$SBBSDIR/nostart");
+			unlink("$LUGDUNONDIR/nostart");
 		}
 		# Start the screen process
-		system("nohup $SBBSDIR/startsynchronetbbs > /tmp/SBBSStartup.log\&");
+		system("nohup $LUGDUNONDIR/startlugdunon > /tmp/LugdunonStartup.log\&");
 	}
 }
 elsif ($Command eq "stop")
 {
-	print "Stopping SBBS process...\n";
-	system("touch '$SBBSDIR/nostart'");
-	if ($running eq "running")
+	print "Stopping Lugdunon process...\n";
+	system("touch '$LUGDUNONDIR/nostart'");
+	if ($running ne "")
 	{
-		kill 'HUP', $pidnum;
+		# Process is running, kill it
+		system($KILL_COMMAND);
+		sleep(10);
 	}
 }
 elsif ($Command eq "restart")
 {
-	if (-f "$SBBSDIR/nostart")
+	if (-f "$LUGDUNONDIR/nostart")
 	{
-		print("Removing $SBBSDIR/nostart\n");
-		unlink("$SBBSDIR/nostart");
+		print("Removing $LUGDUNONDIR/nostart\n");
+		unlink("$LUGDUNONDIR/nostart");
 	}
-	if ($running eq "running")
+	if ($running ne "")
 	{
-		kill 'HUP', $pidnum;
+		system($KILL_COMMAND);
+		sleep(10);
 	}
 }
 elsif ($Command eq "status")
 {
-	if ($running eq "running")
+	if ($running ne "")
 	{
-		print("SBBS Server Running\n");
+		print("Lugdunon Server Running\n");
 	}
 	else
 	{
-		print("SBBS Server Not Running\n");
+		print("Lugdunon Server Not Running\n");
 	}
 }
 else
 {
 	print ("Uknown command '$Command'\n");
-	print ("Usage: $0 {start|status|stop|restart}");
+	print ("Usage: $0 {start|status|stop|restart}\n");
 	exit(1);
 }
 
