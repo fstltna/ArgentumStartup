@@ -35,7 +35,7 @@ my $HOST = <FILE>;
 close FILE;
 chop($HOST);
 
-my $KILL_COMMAND = "/usr/bin/wget -O /dev/null http://$HOST:41976/management/CORE.COMMAND.SHUTDOWN?mode=now";
+my $KILL_COMMAND = "killall anura";
 
 my $Command = $ARGV[0];
 if ($Command eq "")
