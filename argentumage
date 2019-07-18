@@ -1,14 +1,14 @@
 #!/usr/bin/perl
 
 ### BEGIN INIT INFO
-# Provides:          lugdunon
+# Provides:          argentumage
 # Required-Start:    $local_fs $remote_fs $network $syslog
 # Required-Stop:     $local_fs $remote_fs $network $syslog
 # Default-Start:     2 3 4 5
 # Default-Stop:      0 1 6
-# Short-Description: Lugdunon service 1.0
-# Description:       Lugdunon service 1.0
-# Documentation:     https://synchronetbbs.org/index.php/forum/alternate-startup-scripts
+# Short-Description: Argentum Age service 1.0
+# Description:       Argentum Age service 1.0
+# Documentation:     https://argentumage.gameplayer.club
 # Type:              forking
 # X-Interactive:     false
 ### END INIT INFO
@@ -27,7 +27,7 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
-my $LUGDUNONDIR = "/root/lugdunon";
+my $ARGENTUMDIR = "/root/anura";
 # Read in host name
 my $HOSTFILE = "/etc/hostname";
 open FILE, $HOSTFILE or die "Couldn't open file: $HOSTFILE";
@@ -43,27 +43,27 @@ if ($Command eq "")
 	$Command = "NONE";
 }
 
-my $running=`ps ax|grep net.lugdunon.Server|grep -v grep`;
+my $running=`ps ax|grep .\/anura|grep -v grep`;
 
 if ($Command eq "start")
 {
 	if ($running eq "")
 	{
-		print "Starting Lugdunon...\n";
-		if (-f "$LUGDUNONDIR/nostart")
+		print "Starting Argentum Age...\n";
+		if (-f "$ARGENTUMDIR/nostart")
 		{
-			print "Removing $LUGDUNONDIR/nostart\n";
+			print "Removing $ARGENTUMDIR/nostart\n";
 			# Remove the lock file if it exists
-			unlink("$LUGDUNONDIR/nostart");
+			unlink("$ARGENTUMDIR/nostart");
 		}
 		# Start the screen process
-		system("nohup $LUGDUNONDIR/startlugdunon > /tmp/LugdunonStartup.log\&");
+		system("nohup $ARGENTUMDIR/startargentumage > /tmp/ArgentumStartup.log\&");
 	}
 }
 elsif ($Command eq "stop")
 {
-	print "Stopping Lugdunon process...\n";
-	system("touch '$LUGDUNONDIR/nostart'");
+	print "Stopping Argentum Age process...\n";
+	system("touch '$ARGENTUMDIR/nostart'");
 	if ($running ne "")
 	{
 		# Process is running, kill it
@@ -73,10 +73,10 @@ elsif ($Command eq "stop")
 }
 elsif ($Command eq "restart")
 {
-	if (-f "$LUGDUNONDIR/nostart")
+	if (-f "$ARGENTUMDIR/nostart")
 	{
-		print("Removing $LUGDUNONDIR/nostart\n");
-		unlink("$LUGDUNONDIR/nostart");
+		print("Removing $ARGENTUMDIR/nostart\n");
+		unlink("$ARGENTUMDIR/nostart");
 	}
 	if ($running ne "")
 	{
@@ -88,11 +88,11 @@ elsif ($Command eq "status")
 {
 	if ($running ne "")
 	{
-		print("Lugdunon Server Running\n");
+		print("Argentum Age Server Running\n");
 	}
 	else
 	{
-		print("Lugdunon Server Not Running\n");
+		print("Argentum Age Server Not Running\n");
 	}
 }
 else
