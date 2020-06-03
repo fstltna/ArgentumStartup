@@ -9,6 +9,8 @@ These start up the Argentum Age server at boot time with a "screen" process.
 1. Copy **argentumage** into **/home/argentumowner/bin** - make sure it is executable
 2. Copy **startargentumage** into **/home/argentumowner/anura** - make sure it is executable
 3. Copy **run.sh** into **/home/argentumowner/anura** - make sure it is executable
+4. Put **@reboot /home/argentumowner/bin/argentumage start** into your crontab
+
 
 When you want to view the Argentum Age console, just enter "**screen -r**" in your shell.
 
