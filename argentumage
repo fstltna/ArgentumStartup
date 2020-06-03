@@ -27,7 +27,7 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
-my $ARGENTUMDIR = "/root/anura";
+my $ARGENTUMDIR = "/home/argentumowner/argentum-age";
 # Read in host name
 my $HOSTFILE = "/etc/hostname";
 open FILE, $HOSTFILE or die "Couldn't open file: $HOSTFILE";
