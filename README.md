@@ -7,7 +7,8 @@ Official support sites: [Official Github Repo](https://github.com/fstltna/Argent
 These start up the Argentum Age server at boot time with a "screen" process.
 
 1. Copy **argentumage** into **/home/argentumowner/bin** - make sure it is executable
-2. Copy **startargentumage** into **/home/argentumowner/argentum-age** - make sure it is executable
+2. Copy **startargentumage** into **/home/argentumowner/anura** - make sure it is executable
+3. Copy **run.sh** into **/home/argentumowner/anura** - make sure it is executable
 
 When you want to view the Argentum Age console, just enter "**screen -r**" in your shell.
 
@@ -15,7 +16,7 @@ To disconnect from the Argentum Age console just press **CTRL-A CTRL-D**. This w
 
 I have only tested this on a Ubuntu 16.04 server...
 
-If you want to turn off the server respawning type "**touch /home/argentumowner/argentum-age/nostart**". To reenable it type "**rm /home/argentumowner/argentum-age/nostart**".
+If you want to turn off the server respawning type "**touch /home/argentumowner/anura/nostart**". To reenable it type "**rm /home/argentumowner/anura/nostart**".
 
 ---
 Note: If you don't already have the "screen" tool installed you will need to install it by "**sudo apt-get install screen**".
